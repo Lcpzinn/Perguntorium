@@ -1,0 +1,187 @@
+{
+    "materia": "Química - Ensino Fundamental II",
+    "topico": "Misturas Homogêneas e Heterogêneas",
+    "quantidade_cards": 30,
+    "blocos": [
+        {
+            "bloco": 1,
+            "titulo": "Conceitos Fundamentais (Fases e Componentes)",
+            "cards": [
+                {
+                    "id": 1,
+                    "pergunta": "Qual é a diferença básica entre um sistema homogêneo e um sistema heterogêneo?",
+                    "resposta": "O sistema homogêneo apresenta apenas uma fase (aspecto uniforme), enquanto o heterogêneo apresenta duas ou mais fases visíveis."
+                },
+                {
+                    "id": 2,
+                    "pergunta": "O que é um componente em uma mistura?",
+                    "resposta": "É cada uma das substâncias puras que formam a mistura (por exemplo, água e sal são dois componentes)."
+                },
+                {
+                    "id": 3,
+                    "pergunta": "O que é uma fase em um sistema químico?",
+                    "resposta": "É cada porção homogênea (com as mesmas propriedades em toda a sua extensão) que podemos observar em um sistema."
+                },
+                {
+                    "id": 4,
+                    "pergunta": "Se misturarmos água com um pouquinho de sal completamente dissolvido, quantos componentes e quantas fases teremos?",
+                    "resposta": "2 componentes (água e sal) e 1 fase (mistura homogênea)."
+                },
+                {
+                    "id": 5,
+                    "pergunta": "Se colocarmos cubos de gelo em um copo com água líquida, quantas fases e quantos componentes existem no sistema?",
+                    "resposta": "1 componente (apenas água em dois estados físicos) e 2 fases (o gelo sólido e a água líquida). É um sistema heterogêneo!"
+                },
+                {
+                    "id": 6,
+                    "pergunta": "O ar puro e seco que respiramos é considerado uma mistura homogênea ou heterogênea? Por quê?",
+                    "resposta": "Homogênea, porque os gases que o compõem (como oxigênio e nitrogênio) estão perfeitamente misturados, formando apenas uma única fase."
+                }
+            ]
+        },
+        {
+            "bloco": 2,
+            "titulo": "Misturas Homogêneas (Soluções)",
+            "cards": [
+                {
+                    "id": 7,
+                    "pergunta": "O que é o soluto em uma solução?",
+                    "resposta": "É a substância que é dissolvida (geralmente está em menor quantidade, como o sal ou o açúcar)."
+                },
+                {
+                    "id": 8,
+                    "pergunta": "O que é o solvente em uma solução?",
+                    "resposta": "É a substância que dissolve o soluto (geralmente está em maior quantidade, como a água)."
+                },
+                {
+                    "id": 9,
+                    "pergunta": "Por que a água destilada é considerada uma substância pura, mas a água mineral da garrafinha é uma mistura homogênea?",
+                    "resposta": "Porque a água mineral contém vários minerais dissolvidos (vários componentes, uma fase), enquanto a água destilada possui apenas moléculas de H2O."
+                },
+                {
+                    "id": 10,
+                    "pergunta": "O ouro usado em joias (como o ouro 18 quilates) é uma mistura homogênea? Explique.",
+                    "resposta": "Sim, é uma liga metálica (mistura homogênea de ouro com outros metais, como cobre e prata) que forma uma única fase sólida."
+                },
+                {
+                    "id": 11,
+                    "pergunta": "Vinagre limpo e transparente é uma mistura homogênea ou heterogênea? Quantas fases ele tem?",
+                    "resposta": "É uma mistura homogênea (solução aquosa de ácido acético) com 1 fase."
+                },
+                {
+                    "id": 12,
+                    "pergunta": "Se adicionarmos mais e mais açúcar na água até que ele não dissolva mais e comece a acumular no fundo do copo, o sistema continua homogêneo?",
+                    "resposta": "Não. O sistema passa a ser heterogêneo (bifásico), pois há o açúcar que dissolveu (fase líquida) e o açúcar que sobrou no fundo (fase sólida)."
+                }
+            ]
+        },
+        {
+            "bloco": 3,
+            "titulo": "Misturas Heterogêneas",
+            "cards": [
+                {
+                    "id": 13,
+                    "pergunta": "Se misturarmos água e óleo de cozinha em um copo, quantas fases teremos e qual delas fica em cima?",
+                    "resposta": "Teremos 2 fases (sistema bifásico). O óleo fica em cima porque é menos denso que a água."
+                },
+                {
+                    "id": 14,
+                    "pergunta": "Uma colher de areia jogada em um copo d'água forma um sistema com quantas fases e quantos componentes?",
+                    "resposta": "2 componentes (água e areia) e 2 fases (sistema heterogêneo)."
+                },
+                {
+                    "id": 15,
+                    "pergunta": "O que é um sistema polifásico? Dê um exemplo.",
+                    "resposta": "É um sistema que apresenta três ou mais fases. Exemplo: Água + Óleo + Gelo (ou água, areia e óleo)."
+                },
+                {
+                    "id": 16,
+                    "pergunta": "Granito (aquela pedra usada em pias de cozinha) é homogêneo ou heterogêneo? O que conseguimos ver nele?",
+                    "resposta": "É heterogêneo. Conseguimos ver claramente os grãos de minerais diferentes que o compõem (quartzo, feldspato e mica)."
+                },
+                {
+                    "id": 17,
+                    "pergunta": "Se misturarmos cubos de gelo, água líquida, óleo e pedaços de ferro, quantas fases teremos no total?",
+                    "resposta": "4 fases (gelo, água líquida, óleo e ferro)."
+                },
+                {
+                    "id": 18,
+                    "pergunta": "A névoa ou a neblina da manhã (gotículas de água suspensas no ar) é homogênea ou heterogênea?",
+                    "resposta": "É heterogênea, pois as gotículas de água formam uma fase líquida dispersa em uma fase gasosa (coloide)."
+                }
+            ]
+        },
+        {
+            "bloco": 4,
+            "titulo": "Casos Especiais e Pegadinhas",
+            "cards": [
+                {
+                    "id": 19,
+                    "pergunta": "O leite que tiramos da vaca ou compramos no mercado parece homogêneo a olho nu. Por que ele é classificado como heterogêneo na química?",
+                    "resposta": "Porque, ao observarmos no microscópio, vemos gotículas de gordura suspensas no líquido. Ele é um coloide, logo, é heterogêneo."
+                },
+                {
+                    "id": 20,
+                    "pergunta": "O sangue humano parece um líquido uniforme. Ele é homogêneo ou heterogêneo?",
+                    "resposta": "É heterogêneo. Se deixarmos o sangue descansar ou o colocarmos em uma centrífuga, ele se separa em plasma e células sanguíneas (várias fases)."
+                },
+                {
+                    "id": 21,
+                    "pergunta": "O gás de cozinha (mistura de propano e butano) dentro do botijão fechado é homogêneo ou heterogêneo?",
+                    "resposta": "É uma mistura homogênea em seu interior (os gases formam uma fase única)."
+                },
+                {
+                    "id": 22,
+                    "pergunta": "Um copo de refrigerante recém-aberto, cheio de bolhas de gás, é homogêneo ou heterogêneo?",
+                    "resposta": "É heterogêneo enquanto as bolhas de gás estiverem subindo (líquido + gás), pois há mais de uma fase visível."
+                },
+                {
+                    "id": 23,
+                    "pergunta": "É possível termos um sistema formado por uma única substância pura, mas que seja heterogêneo? Dê um exemplo.",
+                    "resposta": "Sim! Exemplo: Água pura líquida com pedaços de gelo (água sólida). É 1 componente, mas 2 fases."
+                },
+                {
+                    "id": 24,
+                    "pergunta": "O bronze (liga de cobre e estanho) usado em medalhas e sinos é uma mistura homogênea ou heterogênea?",
+                    "resposta": "Homogênea, pois é uma solução sólida (liga metálica) com uma única fase."
+                }
+            ]
+        },
+        {
+            "bloco": 5,
+            "titulo": "Introdução à Separação de Misturas",
+            "cards": [
+                {
+                    "id": 25,
+                    "pergunta": "Qual método simples podemos usar para separar uma mistura heterogênea de água e areia?",
+                    "resposta": "A filtração (ou decantação)."
+                },
+                {
+                    "id": 26,
+                    "pergunta": "Se tivermos uma mistura homogênea de água e sal, o método da filtração funciona para separar o sal? Por quê?",
+                    "resposta": "Não, porque o sal está totalmente dissolvido (passa pelo filtro junto com a água). Precisaríamos usar a evaporação ou destilação."
+                },
+                {
+                    "id": 27,
+                    "pergunta": "Qual é o melhor método para separar uma mistura heterogênea de água e óleo?",
+                    "resposta": "A decantação (usando um funil de decantação para escoar a água por baixo)."
+                },
+                {
+                    "id": 28,
+                    "pergunta": "Para separar uma mistura homogênea entre um líquido e um sólido dissolvido (como água e sal) e aproveitar a água, usamos qual processo?",
+                    "resposta": "A destilação simples (onde o vapor de água é condensado e recolhido)."
+                },
+                {
+                    "id": 29,
+                    "pergunta": "Como podemos separar uma mistura de limalha de ferro e grãos de areia usando uma propriedade física?",
+                    "resposta": "Usando um ímã (atração magnética), já que o ferro é atraído e a areia não."
+                },
+                {
+                    "id": 30,
+                    "pergunta": "Se tivermos álcool misturado com água, que formam uma solução homogênea líquida, como chamamos o método principal de separação por diferença de ponto de ebulição?",
+                    "resposta": "Destilação fracionada."
+                }
+            ]
+        }
+    ]
+}
