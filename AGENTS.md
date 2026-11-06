@@ -33,17 +33,23 @@ O banco atual, `cards_quimica_misturas.json`, contém 30 pares de pergunta e res
 
 Não assuma o formato da dinâmica sem combinar com o usuário. Em particular, esclareça:
 
-- Os alunos recebem cards somente com respostas, somente com perguntas, ou um conjunto misto? Como as perguntas são apresentadas durante a atividade?
-- A distribuição aleatória é por aluno, ou cada resposta deve ser associada a uma pergunta/aluno específico? O gabarito precisa mostrar essa associação?
-- Uma pergunta pode aparecer mais de uma vez na mesma atividade? Se a quantidade pedida superar o banco disponível, o programa deve impedir, permitir repetição ou oferecer as duas opções?
-- “Quantas perguntas por aluno” significa quantas perguntas cada aluno responde ou quantos cards de resposta ele recebe?
-- O professor escolhe quais blocos/temas entram na atividade, ou o MVP sorteia do banco inteiro?
+- **Confirmado:** o professor lê cada pergunta em voz alta, e os alunos procuram a resposta nos cards que receberam.
+- **Confirmado:** o aluno que acredita ter a resposta fala em voz alta; se estiver incorreta, o professor informa a resposta esperada e explica o conteúdo.
+- **Confirmado:** os cards dos alunos mostram somente as respostas; as perguntas ficam com o professor.
+- **Confirmado:** uma resposta pode ser distribuída a mais de um aluno, mas cada aluno recebe somente parte do conjunto de respostas.
+- **Confirmado:** cada resposta aparece no máximo uma vez nos cards de cada aluno.
+- **Confirmado:** o professor escolhe quantos cards cada aluno recebe; o mínimo é cinco cards por aluno.
+- **Confirmado:** o sorteio considera todos os blocos do banco escolhido.
+- **Confirmado:** o professor pode selecionar vários arquivos JSON, combinando seus cards na mesma atividade.
+- **Confirmado:** quando houver cards suficientes no total, cada resposta do banco deve ser entregue a pelo menos um aluno.
+- **Confirmado:** se o total de cards não for suficiente para cobrir todas as respostas, o programa avisa e solicita que o professor aumente a quantidade de cards por aluno; não gera uma atividade parcial.
+- **Confirmado:** cada card do professor mostra a pergunta e, logo abaixo, a resposta correta.
 
-Regra provisória para o MVP: não duplicar uma questão numa mesma atividade sem consentimento explícito; se a quantidade solicitada exceder as questões elegíveis, explicar o limite e pedir novos valores. Confirme se essa regra combina com o jogo antes de implementá-la.
+Regra de distribuição confirmada: não repetir uma resposta no conjunto de um mesmo aluno; a mesma resposta pode ser impressa para alunos diferentes. Cobrir todas as respostas ao menos uma vez e, se faltarem cards, solicitar ao professor que aumente a quantidade por aluno.
 
 ## Impressão e acessibilidade de uso
 
-- Proposta inicial de tamanho: carta de baralho tipo poker, 63 × 88 mm. Confirme se é o padrão desejado antes de fixá-lo no PDF.
+- **Confirmado:** tamanho dos cards tipo poker, 63 × 88 mm.
 - Planeje várias cartas por página A4, com linhas de corte e margens adequadas para impressoras comuns.
 - Não dependa de impressão frente e verso no MVP; esse recurso exige alinhamento e deve ser uma decisão posterior.
 - Garanta que textos longos caibam sem cortes, com fonte legível e quebra de linha previsível.
@@ -80,4 +86,4 @@ Um professor consegue executar o programa, escolher um banco compatível, inform
 
 ## Próximo passo
 
-Antes de começar a implementação, apresentar o roteiro ao usuário e confirmar as regras essenciais da dinâmica e o tamanho dos cards.
+As regras essenciais da dinâmica e o tamanho dos cards foram confirmados com o usuário. Apresente o plano de trabalho atualizado e aguarde aprovação antes de iniciar a implementação. Confirme os detalhes de paginação e impressão antes de implementar o PDF.
