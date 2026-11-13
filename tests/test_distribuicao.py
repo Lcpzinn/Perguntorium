@@ -1,6 +1,6 @@
 import pytest
 
-from perguntorium.distribuicao import distribuir_cartas
+from perguntorium.distribuicao import CoberturaInsuficienteError, distribuir_cartas
 
 
 @pytest.fixture
@@ -52,9 +52,31 @@ def test_distribuicao_cobre_todas_as_respostas_quando_possivel(banco_exemplo):
     assert len(respostas_distribuidas) == banco_exemplo["quantidade_cards"]
 
 
-def test_distribuicao_avisar_quando_nao_houver_cards_suficientes(banco_exemplo):
-    with pytest.raises(ValueError, match="insuficiente"):
-        distribuir_cartas(banco_exemplo, numero_alunos=3, cards_por_aluno=5, semente=7)
+def test_distribuicao_repete_respostas_entre_alunos_sem_repetir_no_mesmo_aluno(banco_exemplo):
+    resultado = distribuir_cartas(banco_exemplo, numero_alunos=3, cards_por_aluno=5, semente=7)
+
+    respostas_por_aluno = [
+        [card["resposta"] for card in aluno["cards"]]
+        for aluno in resultado["alunos"]
+    ]
+    assert all(len(respostas) == len(set(respostas)) for respostas in respostas_por_aluno)
+    assert sum(map(len, respostas_por_aluno)) == 15
+    assert len(set.union(*(set(respostas) for respostas in respostas_por_aluno))) == 10
+
+
+def test_distribuicao_e_deterministica_com_a_mesma_semente(banco_exemplo):
+    primeira = distribuir_cartas(banco_exemplo, numero_alunos=3, cards_por_aluno=5, semente=7)
+    segunda = distribuir_cartas(banco_exemplo, numero_alunos=3, cards_por_aluno=5, semente=7)
+
+    assert primeira == segunda
+
+
+def test_distribuicao_ativa_pedido_de_aumento_quando_falta_cobertura(banco_exemplo):
+    with pytest.raises(CoberturaInsuficienteError) as erro:
+        distribuir_cartas(banco_exemplo, numero_alunos=1, cards_por_aluno=5, semente=7)
+
+    assert erro.value.cards_minimos_por_aluno == 10
+    assert erro.value.cards_maximos_por_aluno == 10
 
 
 def test_distribuicao_avisar_quando_nao_cobrir_todas_as_respostas():
@@ -74,5 +96,16 @@ def test_distribuicao_avisar_quando_nao_cobrir_todas_as_respostas():
         ],
     }
 
-    with pytest.raises(ValueError, match="cobrir todas as respostas"):
+    with pytest.raises(CoberturaInsuficienteError) as erro:
         distribuir_cartas(banco, numero_alunos=2, cards_por_aluno=5, semente=7)
+
+    assert erro.value.cards_minimos_por_aluno == 15
+
+
+@pytest.mark.parametrize(
+    ("numero_alunos", "cards_por_aluno"),
+    [(0, 5), (2, 0), (2, -1), (2, 4), (2, 11)],
+)
+def test_distribuicao_rejeita_quantidades_invalidas(banco_exemplo, numero_alunos, cards_por_aluno):
+    with pytest.raises(ValueError):
+        distribuir_cartas(banco_exemplo, numero_alunos, cards_por_aluno, semente=7)

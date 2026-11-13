@@ -25,7 +25,13 @@ No diretório do projeto, instale as dependências:
 
 ## Como usar
 
-### Executar a CLI
+### Executar a CLI em uma linha
+
+```powershell
+"C:/Users/Projeto ciências/AppData/Local/Python/pythoncore-3.14-64/python.exe" main.py --arquivo cards_quimica_misturas.json --alunos 6 --cards-por-aluno 5 --saida exemplo.pdf
+```
+
+Também aceita a forma tradicional:
 
 ```powershell
 "C:/Users/Projeto ciências/AppData/Local/Python/pythoncore-3.14-64/python.exe" main.py cards_quimica_misturas.json --alunos 6 --cards-por-aluno 5 --saida exemplo.pdf
@@ -42,8 +48,11 @@ No diretório do projeto, instale as dependências:
 - mínimo de 5 cards por aluno
 - cada aluno não recebe a mesma resposta mais de uma vez
 - a mesma resposta pode aparecer em alunos diferentes
-- se o total de cards não cobrir todas as respostas, o programa pede aumento na quantidade
+- se a distribuição não cobrir todas as respostas, o programa pede aumento na quantidade
 - o sorteio considera todos os blocos do banco selecionado
+- os cards dos alunos ficam em folhas A4 separadas por aluno; o tamanho se ajusta ao conteúdo e à quantidade
+- se os cards de um aluno não couberem em uma folha com texto legível, são usadas folhas de continuação exclusivas daquele aluno
+- as bordas dos cards servem como linhas de corte; o gabarito permanece separado no mesmo PDF
 
 ## Testes
 

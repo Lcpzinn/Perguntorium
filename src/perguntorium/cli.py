@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from .distribuicao import distribuir_cartas
+from .distribuicao import CoberturaInsuficienteError, distribuir_cartas
 from .loader import carregar_banco
 from .pdf import gerar_pdf
 
@@ -29,7 +29,7 @@ def combinar_bancos(bancos):
     }
 
 
-def pedir_inteiro(prompt, minimo=None):
+def pedir_inteiro(prompt, minimo=None, maximo=None):
     while True:
         valor = input(prompt).strip()
         try:
@@ -42,15 +42,28 @@ def pedir_inteiro(prompt, minimo=None):
             print(f"O valor mínimo é {minimo}.")
             continue
 
+        if maximo is not None and numero > maximo:
+            print(f"O valor máximo é {maximo}.")
+            continue
+
         return numero
 
 
-def interpretar_arquivos(raw_arquivos):
-    if not raw_arquivos:
+def resolver_arquivos(arquivos):
+    valores = []
+    if isinstance(arquivos, str):
+        valores = [arquivos]
+    else:
+        for item in arquivos:
+            if item is None:
+                continue
+            valores.extend(str(item).split(","))
+
+    if not valores:
         raise ValueError("Informe pelo menos um arquivo JSON.")
 
     caminhos = []
-    for item in raw_arquivos.split(","):
+    for item in valores:
         caminho = item.strip()
         if caminho:
             caminhos.append(Path(caminho))
@@ -59,6 +72,10 @@ def interpretar_arquivos(raw_arquivos):
         raise ValueError("Nenhum arquivo JSON foi informado.")
 
     return caminhos
+
+
+def interpretar_arquivos(raw_arquivos):
+    return resolver_arquivos(raw_arquivos)
 
 
 def executar_atividade(arquivos, numero_alunos, cards_por_aluno, caminho_saida, semente=None):
@@ -72,9 +89,14 @@ def executar_atividade(arquivos, numero_alunos, cards_por_aluno, caminho_saida, 
 def main():
     parser = argparse.ArgumentParser(
         description="Perguntorium: geração de cards e gabarito em PDF.",
-        epilog="Exemplo: python main.py cards_quimica_misturas.json --alunos 6 --cards-por-aluno 5 --saida atividade.pdf",
+        epilog=(
+            "Exemplos:\n"
+            "  python main.py --arquivo cards_quimica_misturas.json --alunos 6 --cards-por-aluno 5 --saida atividade.pdf\n"
+            "  python main.py cards_quimica_misturas.json --alunos 6 --cards-por-aluno 5 --saida atividade.pdf"
+        ),
     )
-    parser.add_argument("arquivos", nargs="*", help="Arquivos JSON com os cards.")
+    parser.add_argument("arquivos", nargs="*", help="Arquivos JSON com os cards (forma tradicional).")
+    parser.add_argument("--arquivo", dest="arquivos_opcionais", nargs="+", help="Arquivo(s) JSON em uma linha de comando.")
     parser.add_argument("--alunos", type=int, help="Quantidade de alunos.")
     parser.add_argument("--cards-por-aluno", type=int, help="Quantidade de cards por aluno.")
     parser.add_argument("--saida", default="atividade.pdf", help="Caminho do PDF final.")
@@ -84,8 +106,10 @@ def main():
     print("Perguntorium")
     print("-" * 40)
 
-    if args.arquivos:
-        caminhos = [Path(item) for item in args.arquivos]
+    if args.arquivos_opcionais:
+        caminhos = resolver_arquivos(args.arquivos_opcionais)
+    elif args.arquivos:
+        caminhos = resolver_arquivos(args.arquivos)
     else:
         entrada = input("Informe os arquivos JSON separados por vírgula: ").strip()
         caminhos = interpretar_arquivos(entrada)
@@ -100,14 +124,32 @@ def main():
     else:
         cards_por_aluno = args.cards_por_aluno
 
-    try:
-        destino = executar_atividade(caminhos, numero_alunos, cards_por_aluno, args.saida, semente=args.semente)
-    except FileNotFoundError as erro:
-        print(f"Erro: arquivo não encontrado. Verifique o caminho informado: {erro}")
-        return 1
-    except ValueError as erro:
-        print(f"Erro: {erro}")
-        return 1
+    while True:
+        try:
+            destino = executar_atividade(
+                caminhos,
+                numero_alunos,
+                cards_por_aluno,
+                args.saida,
+                semente=args.semente,
+            )
+            break
+        except CoberturaInsuficienteError as erro:
+            print(f"Aviso: {erro}")
+            cards_minimos = erro.cards_minimos_por_aluno
+            if cards_minimos > 0:
+                cards_por_aluno = pedir_inteiro(
+                    "Informe a nova quantidade de cards por aluno "
+                    f"({cards_minimos} a {erro.cards_maximos_por_aluno}): ",
+                    minimo=cards_minimos,
+                    maximo=erro.cards_maximos_por_aluno,
+                )
+        except FileNotFoundError as erro:
+            print(f"Erro: arquivo não encontrado. Verifique o caminho informado: {erro}")
+            return 1
+        except ValueError as erro:
+            print(f"Erro: {erro}")
+            return 1
 
     print(f"Atividade criada com sucesso: {destino}")
     print("Imprima o arquivo PDF, recorte os cards e separe o gabarito do professor.")

@@ -1,6 +1,18 @@
 import random
 
 
+class CoberturaInsuficienteError(ValueError):
+    """Indica quantos cards cada aluno precisa para cobrir todas as respostas."""
+
+    def __init__(self, cards_minimos_por_aluno, cards_maximos_por_aluno):
+        self.cards_minimos_por_aluno = cards_minimos_por_aluno
+        self.cards_maximos_por_aluno = cards_maximos_por_aluno
+        super().__init__(
+            "A quantidade total de cards dos alunos não cobre todas as respostas. "
+            f"Aumente para {cards_minimos_por_aluno} a {cards_maximos_por_aluno} cards por aluno."
+        )
+
+
 def distribuir_cartas(banco, numero_alunos, cards_por_aluno, semente=None):
     """Distribui cards aleatoriamente respeitando as regras do jogo."""
     if numero_alunos <= 0:
@@ -14,72 +26,59 @@ def distribuir_cartas(banco, numero_alunos, cards_por_aluno, semente=None):
         for card in bloco["cards"]:
             todos_cards.append(dict(card))
 
-    total_disponivel = len(todos_cards)
-    total_necessario = numero_alunos * cards_por_aluno
-
-    if total_disponivel < total_necessario:
-        raise ValueError(
-            "Quantidade insuficiente de cards para atender o total solicitado "
-            f"({total_necessario}) com {numero_alunos} alunos e {cards_por_aluno} cards por aluno."
-        )
-
-    respostas_unicas = []
-    vistas = set()
+    cards_por_resposta = {}
     for card in todos_cards:
-        resposta = card["resposta"]
-        if resposta not in vistas:
-            vistas.add(resposta)
-            respostas_unicas.append(resposta)
+        cards_por_resposta.setdefault(card["resposta"], []).append(card)
 
-    if total_necessario < len(respostas_unicas):
+    respostas_unicas = list(cards_por_resposta)
+    if len(respostas_unicas) < 5:
         raise ValueError(
-            "Quantidade insuficiente de cards para cobrir todas as respostas do banco. "
-            f"Necessário: {len(respostas_unicas)} cards distribuídos no mínimo; atual: {total_necessario}."
+            "O banco precisa ter pelo menos 5 respostas distintas para cada aluno "
+            "receber o mínimo de cards sem repetição."
         )
+    if cards_por_aluno > len(respostas_unicas):
+        raise ValueError(
+            f"O banco tem apenas {len(respostas_unicas)} respostas distintas; "
+            "um aluno não pode receber mais cards do que isso sem repetir respostas."
+        )
+
+    total_necessario = numero_alunos * cards_por_aluno
+    if total_necessario < len(respostas_unicas):
+        cards_minimos = (len(respostas_unicas) + numero_alunos - 1) // numero_alunos
+        raise CoberturaInsuficienteError(max(5, cards_minimos), len(respostas_unicas))
 
     rng = random.Random(semente)
-    restantes = [card.copy() for card in todos_cards]
-    rng.shuffle(restantes)
-
-    alunos = {indice: [] for indice in range(numero_alunos)}
+    rng.shuffle(respostas_unicas)
+    alunos = [[] for _ in range(numero_alunos)]
 
     for resposta in respostas_unicas:
-        candidatos = [card for card in restantes if card["resposta"] == resposta]
-        if not candidatos:
-            continue
+        elegiveis = [
+            indice for indice, cards in enumerate(alunos)
+            if len(cards) < cards_por_aluno
+        ]
+        menor_quantidade = min(len(alunos[indice]) for indice in elegiveis)
+        menos_cards = [
+            indice for indice in elegiveis
+            if len(alunos[indice]) == menor_quantidade
+        ]
+        aluno = rng.choice(menos_cards)
+        alunos[aluno].append(rng.choice(cards_por_resposta[resposta]).copy())
 
-        aluno_alvo = None
-        for indice in range(numero_alunos):
-            if len(alunos[indice]) < cards_por_aluno and not any(card["resposta"] == resposta for card in alunos[indice]):
-                aluno_alvo = indice
-                break
-
-        if aluno_alvo is None:
-            raise ValueError("Não foi possível distribuir todos os cards sem repetir respostas dentro do mesmo aluno.")
-
-        card_escolhido = candidatos[0]
-        alunos[aluno_alvo].append(card_escolhido)
-        restantes.remove(card_escolhido)
-
-    for indice in range(numero_alunos):
-        while len(alunos[indice]) < cards_por_aluno and restantes:
-            candidatos = [
-                card for card in restantes
-                if not any(carta["resposta"] == card["resposta"] for carta in alunos[indice])
+    for indice, cards in enumerate(alunos):
+        respostas_do_aluno = {card["resposta"] for card in cards}
+        while len(cards) < cards_por_aluno:
+            elegiveis = [
+                resposta for resposta in respostas_unicas
+                if resposta not in respostas_do_aluno
             ]
-            if not candidatos:
-                break
-            escolha = rng.choice(candidatos)
-            alunos[indice].append(escolha)
-            restantes.remove(escolha)
-
-    if any(len(alunos[indice]) < cards_por_aluno for indice in range(numero_alunos)):
-        raise ValueError("Não foi possível completar a distribuição com os cards disponíveis.")
+            resposta = rng.choice(elegiveis)
+            cards.append(rng.choice(cards_por_resposta[resposta]).copy())
+            respostas_do_aluno.add(resposta)
 
     resultado = {
         "alunos": [
-            {"aluno": indice + 1, "cards": alunos[indice]}
-            for indice in range(numero_alunos)
+            {"aluno": indice + 1, "cards": cards}
+            for indice, cards in enumerate(alunos)
         ]
     }
     return resultado

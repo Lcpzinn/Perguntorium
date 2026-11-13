@@ -65,3 +65,17 @@ def test_validar_banco_rejeita_card_sem_resposta():
 
     with pytest.raises(ValueError, match="resposta"):
         validar_banco(banco)
+
+
+@pytest.mark.parametrize("campo", ["materia", "topico", "quantidade_cards", "blocos"])
+def test_validar_banco_rejeita_campo_obrigatorio_ausente(campo):
+    banco = {
+        "materia": "Química",
+        "topico": "Misturas",
+        "quantidade_cards": 0,
+        "blocos": [],
+    }
+    del banco[campo]
+
+    with pytest.raises(ValueError, match="obrigatório"):
+        validar_banco(banco)
