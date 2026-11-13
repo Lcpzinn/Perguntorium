@@ -55,3 +55,24 @@ def test_distribuicao_cobre_todas_as_respostas_quando_possivel(banco_exemplo):
 def test_distribuicao_avisar_quando_nao_houver_cards_suficientes(banco_exemplo):
     with pytest.raises(ValueError, match="insuficiente"):
         distribuir_cartas(banco_exemplo, numero_alunos=3, cards_por_aluno=5, semente=7)
+
+
+def test_distribuicao_avisar_quando_nao_cobrir_todas_as_respostas():
+    banco = {
+        "materia": "Química",
+        "topico": "Misturas",
+        "quantidade_cards": 30,
+        "blocos": [
+            {
+                "bloco": 1,
+                "titulo": "Bloco",
+                "cards": [
+                    {"id": i, "pergunta": f"Pergunta {i}", "resposta": f"Resposta {i}"}
+                    for i in range(1, 31)
+                ],
+            }
+        ],
+    }
+
+    with pytest.raises(ValueError, match="cobrir todas as respostas"):
+        distribuir_cartas(banco, numero_alunos=2, cards_por_aluno=5, semente=7)

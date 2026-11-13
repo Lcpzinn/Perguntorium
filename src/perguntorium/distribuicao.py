@@ -12,7 +12,7 @@ def distribuir_cartas(banco, numero_alunos, cards_por_aluno, semente=None):
     todos_cards = []
     for bloco in banco["blocos"]:
         for card in bloco["cards"]:
-            todos_cards.append(card)
+            todos_cards.append(dict(card))
 
     total_disponivel = len(todos_cards)
     total_necessario = numero_alunos * cards_por_aluno
@@ -31,8 +31,11 @@ def distribuir_cartas(banco, numero_alunos, cards_por_aluno, semente=None):
             vistas.add(resposta)
             respostas_unicas.append(resposta)
 
-    if total_disponivel < len(respostas_unicas):
-        raise ValueError("Quantidade insuficiente de cards para cobrir todas as respostas.")
+    if total_necessario < len(respostas_unicas):
+        raise ValueError(
+            "Quantidade insuficiente de cards para cobrir todas as respostas do banco. "
+            f"Necessário: {len(respostas_unicas)} cards distribuídos no mínimo; atual: {total_necessario}."
+        )
 
     rng = random.Random(semente)
     restantes = [card.copy() for card in todos_cards]
@@ -41,41 +44,37 @@ def distribuir_cartas(banco, numero_alunos, cards_por_aluno, semente=None):
     alunos = {indice: [] for indice in range(numero_alunos)}
 
     for resposta in respostas_unicas:
-        candidato = None
-        for card in restantes:
-            if card["resposta"] == resposta:
-                candidato = card
-                break
-
-        if candidato is None:
+        candidatos = [card for card in restantes if card["resposta"] == resposta]
+        if not candidatos:
             continue
 
-        aluno_alvo = rng.choice(list(alunos.keys()))
-        while len(alunos[aluno_alvo]) >= cards_por_aluno:
-            aluno_alvo = rng.choice(list(alunos.keys()))
+        aluno_alvo = None
+        for indice in range(numero_alunos):
+            if len(alunos[indice]) < cards_por_aluno and not any(card["resposta"] == resposta for card in alunos[indice]):
+                aluno_alvo = indice
+                break
 
-        if any(card["resposta"] == resposta for card in alunos[aluno_alvo]):
-            for indice in rng.sample(list(alunos.keys()), k=len(alunos)):
-                if len(alunos[indice]) < cards_por_aluno and not any(card["resposta"] == resposta for card in alunos[indice]):
-                    aluno_alvo = indice
-                    break
+        if aluno_alvo is None:
+            raise ValueError("Não foi possível distribuir todos os cards sem repetir respostas dentro do mesmo aluno.")
 
-        alunos[aluno_alvo].append(candidato)
-        restantes.remove(candidato)
+        card_escolhido = candidatos[0]
+        alunos[aluno_alvo].append(card_escolhido)
+        restantes.remove(card_escolhido)
 
     for indice in range(numero_alunos):
-        while len(alunos[indice]) < cards_por_aluno:
-            candidato = None
-            for card in restantes:
-                if not any(c["resposta"] == card["resposta"] for c in alunos[indice]):
-                    candidato = card
-                    break
+        while len(alunos[indice]) < cards_por_aluno and restantes:
+            candidatos = [
+                card for card in restantes
+                if not any(carta["resposta"] == card["resposta"] for carta in alunos[indice])
+            ]
+            if not candidatos:
+                break
+            escolha = rng.choice(candidatos)
+            alunos[indice].append(escolha)
+            restantes.remove(escolha)
 
-            if candidato is None:
-                candidato = restantes[0]
-
-            alunos[indice].append(candidato)
-            restantes.remove(candidato)
+    if any(len(alunos[indice]) < cards_por_aluno for indice in range(numero_alunos)):
+        raise ValueError("Não foi possível completar a distribuição com os cards disponíveis.")
 
     resultado = {
         "alunos": [
