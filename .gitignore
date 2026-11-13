@@ -1,0 +1,23 @@
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Cache do Python e dos testes
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Arquivos de build e empacotamento
+build/
+dist/
+*.egg-info/
+
+# PDFs gerados pelo programa
+*.pdf
+
+# Arquivos temporarios do sistema
+.DS_Store
+Thumbs.db
